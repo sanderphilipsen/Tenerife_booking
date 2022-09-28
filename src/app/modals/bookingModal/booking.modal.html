@@ -1,0 +1,72 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{isNew ? NEWBOOKING : (editMode  ? UPDATEBOOKING : BOOKING + booking?.Name)}}
+  </h4>
+  <p *ngIf="!editMode && isAdmin" (click)="editMode = true">Edit</p>
+  <p *ngIf="editMode && isAdmin" (click)="delete()">Delete</p>
+</div>
+<div *ngIf="booking" class="modal-body">
+  <form *ngIf="tenants" >
+    <div class="form-group">
+      <label for="exampleInputEmail">Renter</label>
+      <select  [disabled]="!editMode" name="test" [ngModel]="selectedTenant" (ngModelChange)="onChange($event)" class="form-select" aria-label="Default select example">
+        <option *ngFor="let tenant of tenants" [ngValue]="tenant">{{tenant.Name}}</option>
+      </select>
+    </div>
+
+
+      <div class="form-group">
+        <label for="exampleInputEmail">From</label>
+          <input [disabled]="!editMode" name="date1" ngDefaultControl  (change)="updateDate(s.value, true)" #s [value]="booking?.StartDate | date:'yyyy-MM-dd'"    type="date" class="form-control"placeholder="Enter date">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail">Until</label>
+        <input [disabled]="!editMode" (change)="updateDate(e.value, false)" #e  [value]="booking?.EndDate | date:'yyyy-MM-dd'" name="Datum" type="date" class="form-control"  placeholder="Enter date">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail">Total count of days</label>
+        <input [disabled]="true" #e  [value]="this.numberOfDays" type="text" class="form-control"  placeholder="total number of days">
+      </div>
+      <div *ngIf="isAdmin" class="form-group">
+        <label for="exampleInputEmail">Pay status</label>
+        <select [disabled]="!editMode" name="paystatus" [ngModel]="booking.Paystatus" (ngModelChange)="onChangePayStatus($event)" class="form-select" aria-label="Default select example">
+          <option  *ngFor="let p of payStatuses" [ngValue]="p">{{p}}</option>
+        </select>
+      </div>
+      <div *ngIf="isAdmin" class="form-group">
+        <label for="exampleInputEmail">Already payed</label>
+        <input [disabled]="!editMode" [value]="booking?.PrePayedAmount" name="PrePayed" (change)="checkIfBookingIsValid()" [(ngModel)]="booking.PrePayedAmount"  type="number" class="form-control" id="Prepayed"  placeholder="Enter the prepayed">
+      </div>
+      <div *ngIf="isAdmin" class="form-group">
+        <label for="exampleInputEmail">HirePrice</label>
+        <input [disabled]="!editMode" [value]="booking?.HireCost" name="Hirecost" (change)="checkIfBookingIsValid()" [(ngModel)]="booking.HireCost"  type="number" class="form-control" id="HirePrice"  placeholder="Enter hire price">
+      </div>
+      <div *ngIf="isAdmin" class="form-group">
+        <label for="exampleInputEmail">CleaningCost</label>
+        <input [disabled]="!editMode" [value]="booking?.CleaningCost" name="Cleaningcost"  (change)="checkIfBookingIsValid()" [(ngModel)]="booking.CleaningCost" s type="number" class="form-control" id="CleaningCost"  placeholder="Enter cleaning cost">
+      </div>
+      <div *ngIf="isAdmin" class="form-group">
+        <label for="exampleInputEmail">Discount</label>
+        <input [disabled]="!editMode" [value]="booking?.Discount" (change)="discountEdited()" name="Discount"  [(ngModel)]="booking.Discount" type="number" class="form-control" id="Discount"  placeholder="Enter a discount">
+      </div>
+      <div *ngIf="isAdmin" class="form-group">
+        <label for="exampleInputEmail">TotalCost</label>
+        <input [disabled]="!editMode" [value]="booking?.TotalCost" name="Total" (change)="checkIfBookingIsValid()" [(ngModel)]="booking.TotalCost"  type="number" class="form-control" id="TotalCost"  placeholder="Enter the totalcost">
+      </div>
+      <div *ngIf="isAdmin" class="form-group">
+        <label for="exampleInputEmail">Private note</label>
+        <textarea [rows]="5" [disabled]="!editMode" [value]="booking.PrivateNote" name="PrivateNote" (change)="checkIfBookingIsValid()" [(ngModel)]="booking.PrivateNote"  type="text" class="form-control" id="note"  placeholder="Enter a private note (Only the administrators can see this)" >
+        </textarea>
+      </div>
+      <div  class="form-group">
+        <label for="exampleInputEmail">Note</label>
+        <textarea [rows]="5" [disabled]="!editMode" [value]="booking?.AdditionalInfo" name="Note" (change)="checkIfBookingIsValid()" [(ngModel)]="booking.AdditionalInfo"  type="text" class="form-control" id="note"  placeholder="Enter a note (Laura can see this)" >
+        </textarea>
+      </div>
+    <p *ngIf="!bookingIsValid && editMode && isAdmin" class="text-danger">{{BOOKINGNOTVALID}}</p>
+  </form>
+</div>
+<div class="modal-footer">
+  <button *ngIf="editMode && isAdmin" [disabled]="!bookingIsValid" type="button" class="btn btn-outline-dark" (click)="submitForm()">{{isNew ? ADDBOOKING : UPDATEBOOKING}}</button>
+</div>
+
+

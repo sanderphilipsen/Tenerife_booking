@@ -1,0 +1,13 @@
+<div class="step-1" class="offset-2">
+  <h3 class="col-12 mb-5">Wie is de huurder?</h3>
+  <div class="form-group col-3">
+    <input #v name="Datum" type="text" class="form-control" placeholder="Zoek">
+  </div>
+  <div class="row mt-5">
+   <div class="row col-10 offset-right-2">
+   <div style="cursor: pointer;" (click)="onUpdateTenant(tenant)" class="nameT shadow mb-1 ml-5 col-4" [ngClass]="{'selected' : isTenantSelected(tenant)}"  *ngFor="let tenant of listItems | search : v.value : 'FirstName'" >
+     {{tenant.FirstName + ' ' + tenant.Name }}
+   </div>
+ </div>
+ </div>
+</div>

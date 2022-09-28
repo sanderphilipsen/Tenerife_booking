@@ -1,0 +1,15 @@
+<div *ngIf="isAdmin" class="row">
+  <div ngbDropdown class="d-inline-block">
+    <button class="btn" id="dropdownBasic1" ngbDropdownToggle>{{currentAppartment?.Name}}</button>
+    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+      <button (click)="ChangeAppartment(app)" *ngFor="let app of appartments" ngbDropdownItem>{{app.Name}}</button>
+    </div>
+  </div>
+</div>
+
+<app-calendar
+[isAdmin]="isAdmin"
+*ngIf="bookings"
+[appartment]="currentAppartment"
+[bookings]="bookings">
+</app-calendar>

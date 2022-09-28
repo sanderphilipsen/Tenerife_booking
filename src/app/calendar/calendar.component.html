@@ -1,0 +1,60 @@
+<div class="row text-center">
+  <div class="col-md-4">
+    <div class="btn-group">
+      <div
+        class="btn btn-outline-dark"
+        mwlCalendarPreviousView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()"
+      >
+      <p>Previous</p>
+
+      </div>
+      <div
+        class="btn btn-outline-dark"
+        mwlCalendarToday
+        [(viewDate)]="viewDate"
+      >
+      {{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}
+      </div>
+      <div
+        class="btn btn-outline-dark"
+        mwlCalendarNextView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()"
+      >
+        Next
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+  </div>
+  <div class="col-md-4">
+    <button *ngIf="isAdmin" (click)="openBookingModal()" type="button" class="btn btn-outline-dark">New booking</button>
+  </div>
+</div>
+<br />
+<div [ngSwitch]="view">
+  <mwl-calendar-month-view
+    *ngSwitchCase="CalendarView.Month"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    [cellTemplate]="sayHelloTemplate"
+    (dayClicked)="dayClicked($event.day)"
+    (eventClicked)="handleEvent('Clicked', $event.event)"
+    (eventTimesChanged)="eventTimesChanged($event)">
+  </mwl-calendar-month-view>
+</div>
+
+<ng-template  let-day="day"  #sayHelloTemplate>
+  <div class="cell"  class="{{day.events.length > 0 ? day.events[0].color.primary: ''}}">
+  <p class="dayofmonth text-dark">{{  day.date | calendarDate:'monthViewDayNumber' }}</p>
+  <p class="text-center">{{day.events.length > 0 ? ( day.events.length == 2 ? day.events[0].title + '/'+ day.events[1].title :day.events[0].title) : '' }}</p>
+</div>
+</ng-template>
+
+<app-calendar-year-view></app-calendar-year-view>

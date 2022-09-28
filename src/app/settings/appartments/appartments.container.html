@@ -1,0 +1,26 @@
+
+<div class="row">
+  <h1 class="col-3">Appartments</h1>
+  <button (click)="addAppartment()" type="button" class="btn offset-6 col-2 btn-outline-dark">New appartment</button>
+</div>
+
+<div class="mt-3 row">
+  <div *ngFor="let app of appartments" class="col-6 mt-3">
+    <div class="card ">
+      <div class="card-body">
+        <h5 class="card-title">{{app.Name}}</h5>
+        <p class="card-text">{{app.Description}}</p>
+
+        <ul class="list-group col-6 list-group-flush">
+          <li class="list-group-item">Price/day: €{{app.PricePerDay}}</li>
+          <li class="list-group-item">Price/day (longer period): €{{app.PricePerMonth}}</li>
+          <li class="list-group-item">Cleaningcost: €{{app.CleaningCost}}</li>
+        </ul>
+        <div class="row ">
+        <button (click)="openBookingModal(false, app)" type="button" class="btn col-2 btn-outline-dark">Edit</button>
+      </div>
+      </div>
+    </div>
+  </div>
+
+</div>

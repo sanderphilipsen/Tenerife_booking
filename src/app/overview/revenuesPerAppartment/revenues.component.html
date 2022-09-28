@@ -1,0 +1,13 @@
+<div>
+  <button *ngIf="!loaded" (click)="Load()" class="btn col-12 btn-primary">Load</button>
+  <div *ngIf="loaded" style="display: block">
+    <canvas baseChart
+    [datasets]="barChartData"
+    [labels]="barChartLabels"
+    [options]="barChartOptions"
+    [plugins]="barChartPlugins"
+    [legend]="barChartLegend"
+    [type]="'bar'">
+  </canvas>
+  </div>
+</div>
