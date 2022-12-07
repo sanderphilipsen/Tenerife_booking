@@ -3,7 +3,6 @@ import { map } from 'rxjs';
 import { AppartmentService } from 'src/services/appartment.service';
 import { AuthService } from 'src/services/auth.service';
 import { BookingService } from 'src/services/booking.service';
-import { Roles } from '../enums/roles';
 import { Appartment } from '../models/appartement';
 import { Booking } from '../models/booking';
 
@@ -22,9 +21,9 @@ constructor(private appartmentService : AppartmentService,
    private bookingService: BookingService,
    private authService: AuthService) {
 }
-  ngOnInit(): void {
+   ngOnInit() {
       this.getAppartments();
-      this.isAdmin  = this.authService.getRole == Roles.Admin;
+      this.isAdmin  = this.authService.isAdmin;
   }
 
   private getAppartments(): void {

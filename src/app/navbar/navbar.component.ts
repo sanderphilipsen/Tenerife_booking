@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { auditTrail } from '@angular/fire/compat/database';
 import { AuthService } from 'src/services/auth.service';
-import { Roles } from '../enums/roles';
 import { Appartment } from '../models/appartement';
 
 @Component({
@@ -18,7 +17,7 @@ export class NavBarComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    //this.role = this.authService.getRole;
+    //this.role = this.authService.isAdmin;
   }
 
   ChangeAppartment(appartment : Appartment) {

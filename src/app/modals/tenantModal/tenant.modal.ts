@@ -22,23 +22,27 @@ export class TenantModal implements OnInit {
 
   ngOnInit(): void {
     this.tenantForm = this.fb.group({
-      firstName : this.fb.control(this.tenant.FirstName, Validators.required),
-      name : this.fb.control(this.tenant.Name, Validators.required),
-      email : this.fb.control(this.tenant.Email, [Validators.email, Validators.required]),
-      phoneNr : this.fb.control(this.tenant.PhoneNumber ),
-      adress : this.fb.control(this.tenant.Adress),
-      additionalInfo : this.fb.control(this.tenant.AdditionallInfo),
+      FirstName : this.fb.control(this.tenant.FirstName, Validators.required),
+      Name : this.fb.control(this.tenant.Name, Validators.required),
+      Email : this.fb.control(this.tenant.Email, [Validators.email, Validators.required]),
+      PhoneNumber : this.fb.control(this.tenant.PhoneNumber ),
+      Adress : this.fb.control(this.tenant.Adress),
+      AdditionallInfo : this.fb.control(this.tenant.AdditionallInfo),
+      key: this.fb.control(this.tenant.key),
     });
+  }
+  public close() {
+    this.activeModal.close();
   }
 
   public submitForm() {
-    this.tenantForm.errors
-    if (!this.tenant)
+    if (this.tenantForm.invalid)
       return;
-    if (this.isNew )
-      this.tenantService.Insert(this.tenant);
+    if (this.isNew)
+      this.tenantService.Insert(this.tenantForm.getRawValue() as Tenant);
     else
-       this.tenantService.Update(this.tenant);
+       this.tenantService.Update(this.tenantForm.getRawValue() as Tenant);
+
   this.activeModal.close();
   }
 }

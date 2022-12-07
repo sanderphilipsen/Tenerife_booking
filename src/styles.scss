@@ -1,1 +1,7 @@
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
+
+.center {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}

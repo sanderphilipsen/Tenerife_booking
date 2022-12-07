@@ -1,31 +1,33 @@
 <div class="modal-header">
   <h4 class="modal-title"> {{isNew ? "New tenant" : "Update tenant"}}</h4>
+  <h4 (click)="close()">Close</h4>
+
 </div>
 <div  class="modal-body">
   <form [formGroup]="tenantForm" >
     <div class="form-group">
       <label for="exampleInputEmail">First Name</label>
-      <input type="text" formControlName="firstName"  class="form-control" placeholder="Enter the tenants firstName">
+      <input type="text" formControlName="FirstName"  class="form-control" placeholder="Enter the tenants firstName">
     </div>
     <div class="form-group">
       <label for="exampleInputEmail">Name</label>
-      <input type="text" formControlName="name"  class="form-control"  placeholder="Enter the tenant name">
+      <input type="text" formControlName="Name"  class="form-control"  placeholder="Enter the tenant name">
     </div>
     <div class="form-group">
       <label for="exampleInputEmail">Email</label>
-      <input formControlName="email"  type="text" class="form-control"   placeholder="Enter the tenant email">
+      <input formControlName="Email"  type="text" class="form-control"   placeholder="Enter the tenant email">
     </div>
       <div class="form-group">
         <label for="exampleInputEmail">Phone number</label>
-        <input formControlName="phoneNr" name="Phonenumber" type="text" class="form-control"  placeholder="Enter the tenant phone number">
+        <input formControlName="PhoneNumber" name="Phonenumber" type="text" class="form-control"  placeholder="Enter the tenant phone number">
       </div>
       <div class="form-group">
         <label for="exampleInputEmail">Adress</label>
-        <input formControlName="adress" name="Adress" type="text" class="form-control"  placeholder="Enter the tenant address">
+        <input formControlName="Adress" name="Adress" type="text" class="form-control"  placeholder="Enter the tenant address">
       </div>
       <div class="form-group">
         <label for="exampleInputEmail">Additional information</label>
-        <input formControlName="additionalInfo" type="text" class="form-control" placeholder="Enter here some additional information">
+        <input formControlName="AdditionallInfo" type="text" class="form-control" placeholder="Enter here some additional information">
       </div>
   </form>
 

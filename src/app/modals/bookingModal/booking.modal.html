@@ -1,18 +1,35 @@
 <div class="modal-header">
-  <h4 class="modal-title">{{isNew ? NEWBOOKING : (editMode  ? UPDATEBOOKING : BOOKING + booking?.Name)}}
-  </h4>
+  <div>
+    <h4 class="modal-title">{{isNew ? NEWBOOKING : (editMode  ? UPDATEBOOKING : BOOKING + booking?.Name)}}
+    </h4>
+
   <p *ngIf="!editMode && isAdmin" (click)="editMode = true">Edit</p>
-  <p *ngIf="editMode && isAdmin" (click)="delete()">Delete</p>
+  <p *ngIf="editMode && isAdmin && !isNew" (click)="delete()">Delete</p>
+  </div>
+
+  <h4 (click)="close()">Close</h4>
+
 </div>
 <div *ngIf="booking" class="modal-body">
   <form *ngIf="tenants" >
+    <ng-template #rt let-r="result" let-t="term">
+      <ngb-highlight [result]='r.FirstName + " " + r.Name' [term]="t"></ngb-highlight>
+    </ng-template>
     <div class="form-group">
       <label for="exampleInputEmail">Renter</label>
-      <select  [disabled]="!editMode" name="test" [ngModel]="selectedTenant" (ngModelChange)="onChange($event)" class="form-select" aria-label="Default select example">
-        <option *ngFor="let tenant of tenants" [ngValue]="tenant">{{tenant.Name}}</option>
-      </select>
+        <input
+        name="Renter"
+        [disabled]="!editMode"
+          id="typeahead-template"
+          type="text"
+          class="form-control col"
+          [(ngModel)]="selectedTenant"
+          [ngbTypeahead]="search"
+          [resultTemplate]="rt"
+          [inputFormatter]="formatter"
+          (ngModelChange)="onChange($event)"
+        />
     </div>
-
 
       <div class="form-group">
         <label for="exampleInputEmail">From</label>
@@ -22,7 +39,7 @@
         <label for="exampleInputEmail">Until</label>
         <input [disabled]="!editMode" (change)="updateDate(e.value, false)" #e  [value]="booking?.EndDate | date:'yyyy-MM-dd'" name="Datum" type="date" class="form-control"  placeholder="Enter date">
       </div>
-      <div class="form-group">
+      <div *ngIf="isAdmin" class="form-group">
         <label for="exampleInputEmail">Total count of days</label>
         <input [disabled]="true" #e  [value]="this.numberOfDays" type="text" class="form-control"  placeholder="total number of days">
       </div>
@@ -54,12 +71,12 @@
       </div>
       <div *ngIf="isAdmin" class="form-group">
         <label for="exampleInputEmail">Private note</label>
-        <textarea [rows]="5" [disabled]="!editMode" [value]="booking.PrivateNote" name="PrivateNote" (change)="checkIfBookingIsValid()" [(ngModel)]="booking.PrivateNote"  type="text" class="form-control" id="note"  placeholder="Enter a private note (Only the administrators can see this)" >
+        <textarea [rows]="5" [disabled]="!editMode" [value]="booking.PrivateNote" name="PrivateNote" [(ngModel)]="booking.PrivateNote"  type="text" class="form-control" id="note"  placeholder="Enter a private note (Only the administrators can see this)" >
         </textarea>
       </div>
       <div  class="form-group">
         <label for="exampleInputEmail">Note</label>
-        <textarea [rows]="5" [disabled]="!editMode" [value]="booking?.AdditionalInfo" name="Note" (change)="checkIfBookingIsValid()" [(ngModel)]="booking.AdditionalInfo"  type="text" class="form-control" id="note"  placeholder="Enter a note (Laura can see this)" >
+        <textarea [rows]="5" [disabled]="!editMode" [value]="booking?.AdditionalInfo" name="Note" [(ngModel)]="booking.AdditionalInfo"  type="text" class="form-control" id="note"  placeholder="Enter a note (Laura can see this)" >
         </textarea>
       </div>
     <p *ngIf="!bookingIsValid && editMode && isAdmin" class="text-danger">{{BOOKINGNOTVALID}}</p>

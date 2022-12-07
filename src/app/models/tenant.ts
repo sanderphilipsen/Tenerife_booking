@@ -1,6 +1,6 @@
 export class Tenant {
 
-  constructor(name?: string, firstName?:string, email?: string, phoneNumber?: string, adress?: string, additionalInfo? : string) {
+  constructor(name?: string, firstName?: string, email?: string, phoneNumber?: string, adress?: string, additionalInfo? : string) {
    this.Name = name;
    this.Email = email;
    this.PhoneNumber = phoneNumber;
@@ -14,6 +14,6 @@ export class Tenant {
   AdditionallInfo? : string | null = null;
   PhoneNumber?: string | null = null;
   Name?: string | null = null;
-  FirstName?: string | null = null;
+  FirstName?: string | null  = null;
   key?: string | null = null;
 }

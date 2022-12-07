@@ -1,34 +1,35 @@
 <div class="modal-header">
   <h4 class="modal-title"> {{isNew ? NEWAPPARTMENT : UPDATEAPPARTMENT}}</h4>
+  <h4 (click)="close()">Close</h4>
+
 </div>
 <div  class="modal-body">
-  <form >
+  <form [formGroup]="appartmentForm" >
     <div class="form-group">
       <label for="exampleInputEmail">Name</label>
-      <input (change)="CheckEverthingFilledIn()" [(ngModel)]="appartment.Name" [value]="appartment?.Name" name="Name" type="text"   class="form-control" id="appartmentName"  placeholder="Enter the appartment name">
+      <input formControlName="Name"  name="Name" type="text"   class="form-control" id="appartmentName"  placeholder="Enter the appartment name">
     </div>
     <div class="form-group">
       <label for="exampleInputEmail">Description</label>
-      <input (change)="CheckEverthingFilledIn()" [(ngModel)]="appartment.Description" [value]="appartment?.Description" name="Description" type="text" class="form-control" id="appartmentDescription"  placeholder="Enter the appartment description">
+      <input  formControlName="Description"  name="Description" type="text" class="form-control" id="appartmentDescription"  placeholder="Enter the appartment description">
     </div>
 
       <div class="form-group">
         <label for="exampleInputEmail">Price/day</label>
-        <input (change)="CheckEverthingFilledIn()" [(ngModel)]="appartment.PricePerDay" [value]="appartment?.PricePerDay" name="PricePerDay" type="number" class="form-control" id="HirePrice"  placeholder="Enter hire price/per day">
+        <input formControlName="PricePerDay"   name="PricePerDay" type="number" class="form-control" id="HirePrice"  placeholder="Enter hire price/per day">
       </div>
       <div class="form-group">
         <label for="exampleInputEmail">Price/day (longer as 20 days)</label>
-        <input (change)="CheckEverthingFilledIn()" [(ngModel)]="appartment.PricePerMonth" [value]="appartment?.PricePerMonth" name="PricePerMonth"  type="number" class="form-control" id="PricePerMonth"  placeholder="Enter hire price/per day (longer period)">
+        <input formControlName="PricePerMonth"  name="PricePerMonth"  type="number" class="form-control" id="PricePerMonth"  placeholder="Enter hire price/per day (longer period)">
       </div>
       <div class="form-group">
         <label for="exampleInputEmail">Cleaningcost</label>
-        <input (change)="CheckEverthingFilledIn()" [(ngModel)]="appartment.CleaningCost" [value]="appartment?.CleaningCost" name="CleaningCost"  type="number" class="form-control" id="CleaningCost"  placeholder="Enter the cleaning cost">
+        <input formControlName="CleaningCost"  name="CleaningCost"  type="number" class="form-control" id="CleaningCost"  placeholder="Enter the cleaning cost">
       </div>
   </form>
-  <p class="text-danger" *ngIf="!formIsValid" >{{APPARTMENTNOTVALID}}</p>
 </div>
 <div class="modal-footer">
-  <button [disabled]="!formIsValid" type="button" class="btn btn-outline-dark" (click)="SubmitForm()">{{isNew ? ADDAPPARTMENT: UPDATEAPPARTMENT}}</button>
+  <button [disabled]="appartmentForm.invalid" type="button" class="btn btn-outline-dark" (click)="SubmitForm()">{{isNew ? ADDAPPARTMENT: UPDATEAPPARTMENT}}</button>
 </div>
 
 

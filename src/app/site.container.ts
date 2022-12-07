@@ -5,18 +5,16 @@ import { AuthService } from 'src/services/auth.service';
 @Component({
   selector: 'app-site',
   template: `
-  <app-navbar *ngIf="isLoggedIn"></app-navbar>
+  <app-navbar *ngIf="isAdmin"></app-navbar>
   <div class="mt-4">
-    <router-outlet></router-outlet>
+    <router-outlet ></router-outlet>
   </div>`
 })
 export class SiteContainer implements OnInit{
-  public isLoggedIn = false;
+  public isAdmin = false;
   constructor(private authService: AuthService) {
   }
-  ngOnInit(): void {
-    this.isLoggedIn =  this.authService.isLoggedIn;
+   ngOnInit() {
+    this.isAdmin = this.authService.isAdmin ;
   }
-
-
 }

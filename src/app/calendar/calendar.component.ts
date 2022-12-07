@@ -9,6 +9,7 @@ import { BookingModal } from '../modals/bookingModal/booking.modal';
 import { Appartment } from '../models/appartement';
 import { BookingService } from 'src/services/booking.service';
 import { PayStatusEnum } from '../enums/payStatusEnum';
+import { AuthService } from 'src/services/auth.service';
 
 @Component({
   selector: 'app-calendar',
@@ -17,15 +18,16 @@ import { PayStatusEnum } from '../enums/payStatusEnum';
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent implements OnInit, OnChanges {
+
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any> | undefined;
   @Input() bookings : Booking[] = [];
   @Input() appartment: Appartment | null = null;
-  @Input() isAdmin : boolean = false;
+
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   public bookingPopup: Booking | null = null;
   viewDate: Date = new Date();
-
+  isAdmin: boolean = false ;
   public openBookingModal() {
     const modalRef = this.modalService.open(BookingModal);
 
@@ -68,16 +70,17 @@ export class CalendarComponent implements OnInit, OnChanges {
   activeDayIsOpen: boolean = false;
 
   constructor(private modalService: NgbModal,
-     private bookingService: BookingService) {}
+     private bookingService: BookingService, private authService: AuthService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
    this.events = [];
     this.addCalendarEvents();
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.events = [];
     this.addCalendarEvents();
+    this.isAdmin = this.authService.isAdmin;
   }
 
   addCalendarEvents() {
@@ -104,7 +107,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     if (events.length == 0)
       return;
     var booking = this.bookingService.getBookingFromDay(date, this.bookings);
-    if (!booking)
+    if (!booking || booking == undefined)
       return;
     const modalRef = this.modalService.open(BookingModal);
 
@@ -114,11 +117,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     modalRef.componentInstance.isAdmin = this.isAdmin;
     modalRef.componentInstance.booking = booking;
 
-    modalRef.componentInstance.result.then((result: { value: boolean; }) =>{
-      console.log(result);
 
-    },(dismiss: any)=>{
-    })
   }
 
   eventTimesChanged({
@@ -156,7 +155,6 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.activeDayIsOpen = false;
   }
   public open(content: any, booking : Booking | false) {
-    console.log(booking);
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
     }, (reason) => {
     });

@@ -1,6 +1,6 @@
-import { Component, Input, OnInit} from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { map } from 'rxjs';
+import { Component, Input, OnInit, ViewChild} from '@angular/core';
+import { NgbActiveModal, NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
+import { debounceTime, distinctUntilChanged, filter, map, merge, Observable, OperatorFunction, Subject } from 'rxjs';
 import { PayStatusEnum } from 'src/app/enums/payStatusEnum';
 import { Appartment } from 'src/app/models/appartement';
 import { Booking } from 'src/app/models/booking';
@@ -23,18 +23,34 @@ export class BookingModal implements OnInit {
 
   public payStatuses : PayStatusEnum[] = [PayStatusEnum.FullyPayed, PayStatusEnum.NotPayed, PayStatusEnum.SemiPayed];
   public selectedTenant : Tenant | null  = null;
-  public tenants: Tenant[] | null = null;
+  public tenants: Tenant[]  = [];
   public bookingIsValid: boolean = false;
   public editMode: boolean = false;
   public numberOfDays: number = 0;
 
+  model: any;
+
+	@ViewChild('instance', { static: true }) instance! : NgbTypeahead;
+	focus$ = new Subject<string>();
+	click$ = new Subject<string>();
+
+	search: OperatorFunction<string, readonly Tenant []> = (text$: Observable<string>) =>
+		text$.pipe(
+			debounceTime(200),
+			map((term) =>
+				term === ''
+					? []
+					: this.tenants.filter((v) => (v.FirstName && v.Name) && ((v.FirstName.toLowerCase().indexOf(term.toLowerCase()) > -1 || v.Name.toLowerCase().indexOf(term.toLowerCase())) > -1)).slice(0, 10),
+			),
+		)
+	formatter = (tenant: Tenant) => tenant.FirstName + " " + tenant.Name;
+
   constructor(
     public activeModal: NgbActiveModal,
-     private tenantService: TenantService,
-     private bookingService : BookingService) {}
+    private tenantService: TenantService,
+    private bookingService : BookingService) {}
 
   ngOnInit(): void {
-    console.log(this.booking?.PrePayedAmount);
     if (this.isNew) {
       this.booking = new Booking();
       this.editMode = true;
@@ -45,14 +61,11 @@ export class BookingModal implements OnInit {
 //#region Public methods
   public selectTenant(value: Tenant){
     this.selectedTenant = value;
-
   }
 
   public updateDate(value: any, isStartDate: boolean) {
-
     if (!this.isAdmin)
       return;
-
     if (this.booking) {
       if (isStartDate)
         this.booking.StartDate = new Date(value);
@@ -93,9 +106,12 @@ export class BookingModal implements OnInit {
 
     if(confirm("Are you sure you want delete the booking of "+ this.booking.Name)) {
       this.bookingService.Delete(this.booking);
-      this.activeModal.close();
+      this.close();
     }
   }
+}
+public close() {
+  this.activeModal.close();
 }
 
   public submitForm() {
@@ -108,11 +124,13 @@ export class BookingModal implements OnInit {
       this.booking.PrePayedAmount = 0;
     if (!this.booking.AdditionalInfo)
       this.booking.AdditionalInfo = "No additional info";
+      if (!this.booking.PrivateNote)
+      this.booking.PrivateNote = "No private note";
     if (this.isNew)
       this.bookingService.Insert(this.booking);
     else
       this.bookingService.Update(this.booking);
-
+  this.activeModal.close();
       this.editMode = false;
   }
 
@@ -120,8 +138,8 @@ export class BookingModal implements OnInit {
     if (this.booking)
       this.bookingIsValid = this.bookingService.IsBookingValid(this.booking, this.bookings);
   }
-//#endregion Public methods
 
+//#endregion Public methods
 //#region Private methods
 
   private GetTenants() {
@@ -132,7 +150,9 @@ export class BookingModal implements OnInit {
         )
       )
     ).subscribe(data => {
-      this.tenants = data;
+      if (data)
+        this.tenants = data;
+
       this.InitAfterTenantsAreReceived();
     });
   }

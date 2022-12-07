@@ -32,32 +32,28 @@ export class BookingService extends DatabaseService<Booking> {
       if (new Date(booking.StartDate) > new Date(booking.EndDate) || new Date(booking.StartDate) == new Date(booking.EndDate)) {
           isValid = false;
         }
-        console.log(isValid);
-
-        console.log(booking);
         var conflictingbookings = bookings.filter( x =>
           (x.StartDate  && booking.StartDate && x.EndDate
-            && new Date(x.StartDate) < new Date(booking.StartDate) && new Date(x.EndDate) > new Date(booking.StartDate))
+            && new Date(x.StartDate) <= new Date(booking.StartDate) && new Date(x.EndDate) >= new Date(booking.StartDate))
             ||
             (x.StartDate != null && booking.EndDate != null && x.EndDate != null
               && new Date(x.StartDate) < new Date(booking.EndDate) && new Date(x.EndDate) > new Date(booking.EndDate))
             ||
-             (x.StartDate  && booking.StartDate && x.EndDate && booking.EndDate
-              && new Date(x.StartDate)> booking.StartDate && new Date(x.EndDate) < booking.EndDate ));
+             (x.StartDate && booking.StartDate && x.EndDate && booking.EndDate
+              && new Date(x.StartDate) >= booking.StartDate && new Date(x.EndDate) <= booking.EndDate ));
         if (conflictingbookings.length > 0){
           isValid = false;
         }
-        console.log(conflictingbookings);
     }
 
     return isValid;
   }
 
-  public getBookingFromDay(day : Date, bookings : Booking[]) : Booking{
-    var booking = bookings.filter( x =>
-      (x.StartDate && day  && x.EndDate
-        && new Date(x.StartDate) <= day && new Date(x.EndDate) >= new Date(day))
+  public getBookingFromDay(day : Date, bookings : Booking[]) : Booking | undefined{
+    var booking = bookings.find( x =>
+      x.StartDate && day && x.EndDate
+        && ((new Date(new Date(x.StartDate).setHours(-2)) <= day && new Date(x.EndDate) >= new Date(day)))
         );
-    return booking[0];
+    return booking;
   }
 }

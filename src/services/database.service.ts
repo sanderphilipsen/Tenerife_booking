@@ -1,6 +1,6 @@
 
 import { Injectable} from '@angular/core';
-import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
+import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/compat/database';
 import { MayHaveKey } from 'src/app/interfaces/mayHaveKey';
 import { environment } from 'src/environments/environment';
 import { IDatabaseService } from './interfaces/iDatabase.service';
@@ -21,6 +21,9 @@ export abstract class DatabaseService<T extends MayHaveKey> implements IDatabase
 
   public GetAll(): AngularFireList<T> {
     return this.db.list(`${this.devTables + this.dbPath}`);
+  }
+  public GetByKey(key: string): AngularFireObject<T> {
+    return this.db.object(`${this.devTables}${this.dbPath}/${key}`);
   }
 
   public Insert (object: T) : void {

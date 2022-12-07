@@ -1,18 +1,16 @@
-
 <div class="row">
   <h1 class="col-3">Tenants</h1>
-  <button (click)="addTenant()" type="button" class="btn offset-6 col-2 btn-outline-dark">New tenant</button>
+  <button (click)="addTenant()" type="button" class="btn offset-lg-6 col-lg-2 btn-outline-dark">New tenant</button>
 </div>
-<table class=" table">
+<table class="col-lg-12 table">
   <thead>
     <tr>
       <th scope="col">FirstName</th>
-      <th scope="col">Name</th>
-      <th scope="col">Email</th>
+      <th scope="col ">Name</th>
+      <th scope="col ">Email</th>
       <th scope="col">Phonenumber</th>
-      <th scope="col">Adress</th>
-      <th scope="col">Extra information</th>
-
+      <th scope="col ">Adress</th>
+      <th scope="col ">Extra information</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
@@ -20,11 +18,12 @@
     <tr *ngFor="let t of tenants">
       <th scope="row">{{t.FirstName}}</th>
       <th scope="row">{{t.Name}}</th>
-      <td>{{t.Email}}</td>
-      <td>{{t.PhoneNumber}}</td>
-      <td>{{t.Adress}}</td>
-      <td>{{t.AdditionallInfo}}</td>
-      <td> <button (click)="openBookingModal(false, t)" type="button" class="btn btn-outline-dark">Edit</button>
+      <td scope="row">{{t.Email}}</td>
+      <td scope="row">{{t.PhoneNumber}}</td>
+      <td scope="row">{{t.Adress}}</td>
+      <td scope="row">{{t.AdditionallInfo}}</td>
+      <td scope="row"> <button (click)="openBookingModal(false, t)" type="button"
+          class="btn button btn-outline-dark">Edit</button>
       </td>
     </tr>
   </tbody>

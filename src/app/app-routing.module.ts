@@ -5,14 +5,14 @@ import { AuthGuard } from './authentication/guards/auth';
 import { CalendarGuard } from './authentication/guards/calendarViewer';
 import { SignInComponent } from './authentication/signIn.component';
 import { Homepage } from './home/home.page';
+import { NoAccessComponent } from './authentication/noAcces.component';
 import { OverviewPage } from './overview/overview.page';
 import { SettingsPage } from './settings/settings.page';
-import { BaseStepper } from './steppers/booking/base.stepper';
 
 const routes: Routes = [
   {path: 'home', component: Homepage, canActivate: [AuthGuard,CalendarGuard]},
   {path: 'sign-in', component: SignInComponent},
-  {path: 'booking-stepper', component: BaseStepper},
+  {path: 'no-access', component: NoAccessComponent},
   {path: 'settings', component: SettingsPage,canActivate: [AuthGuard, AdminGuard]},
   {path: 'overview', component: OverviewPage,canActivate: [AuthGuard, AdminGuard]},
   {path: '**', redirectTo:'home', pathMatch : 'full'}
