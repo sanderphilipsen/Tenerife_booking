@@ -22,7 +22,6 @@ export class TenantModal implements OnInit {
 
   ngOnInit(): void {
     this.tenantForm = this.fb.group({
-      FirstName : this.fb.control(this.tenant.FirstName, Validators.required),
       Name : this.fb.control(this.tenant.Name, Validators.required),
       Email : this.fb.control(this.tenant.Email, [Validators.email, Validators.required]),
       PhoneNumber : this.fb.control(this.tenant.PhoneNumber ),

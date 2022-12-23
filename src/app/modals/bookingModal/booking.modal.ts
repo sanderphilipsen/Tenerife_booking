@@ -8,6 +8,7 @@ import { Tenant } from 'src/app/models/tenant';
 import { BookingService } from 'src/services/booking.service';
 import { TenantService } from 'src/services/tenant.service';
 
+
 @Component({
   selector: 'ngb-booking-modal',
   templateUrl: './booking.modal.html'
@@ -40,10 +41,17 @@ export class BookingModal implements OnInit {
 			map((term) =>
 				term === ''
 					? []
-					: this.tenants.filter((v) => (v.FirstName && v.Name) && ((v.FirstName.toLowerCase().indexOf(term.toLowerCase()) > -1 || v.Name.toLowerCase().indexOf(term.toLowerCase())) > -1)).slice(0, 10),
+					: this.tenants.filter((v) => ( v.Name) && ((v.Name.toLowerCase().indexOf(term.toLowerCase())) > -1)).slice(0, 10),
 			),
-		)
-	formatter = (tenant: Tenant) => tenant.FirstName + " " + tenant.Name;
+		);
+
+  formatter(result: Tenant): string {
+    console.log(result);
+    var rs = result.Name;
+    if (rs != null)
+      return rs;
+    return "";
+  }
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -56,6 +64,8 @@ export class BookingModal implements OnInit {
       this.editMode = true;
     }
     this.GetTenants();
+    console.log(this.booking?.StartDate )
+    this.numberOfDays = this.calculateDays(this.booking?.StartDate as Date, this.booking?.EndDate as Date) + 1;
   }
 
 //#region Public methods
@@ -86,12 +96,6 @@ export class BookingModal implements OnInit {
       this.booking.TenantKey = newValue.key;
       this.booking.Name = newValue.Name;
     }
-  }
-
-  public onChangePayStatus(newValue: PayStatusEnum) {
-    if (this.booking)
-      this.booking.Paystatus = newValue;
-    this.checkIfBookingIsValid();
   }
 
   public discountEdited() {
@@ -189,7 +193,9 @@ public close() {
   }
 
   public calculateDays(from: Date, until: Date): number {
-      var Time = until.getTime() - from.getTime();
+    console.log(until);
+    console.log(from);
+      var Time = new Date(until.toString()).getTime() - new Date(from.toString()).getTime();
       return Time / (1000 * 3600 * 24);
 }
 //#endregion Private methods

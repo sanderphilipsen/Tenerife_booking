@@ -25,8 +25,6 @@ export class BookingService extends DatabaseService<Booking> {
       isValid = false;
     if (booking.EndDate == null || booking.EndDate == undefined)
       isValid = false;
-    if (booking.Paystatus == null)
-      isValid = false;
 
     if (booking.StartDate != null && booking.EndDate != null) {
       if (new Date(booking.StartDate) > new Date(booking.EndDate) || new Date(booking.StartDate) == new Date(booking.EndDate)) {
@@ -41,7 +39,7 @@ export class BookingService extends DatabaseService<Booking> {
             ||
              (x.StartDate && booking.StartDate && x.EndDate && booking.EndDate
               && new Date(x.StartDate) >= booking.StartDate && new Date(x.EndDate) <= booking.EndDate ));
-        if (conflictingbookings.length > 0){
+        if (conflictingbookings.filter(x => x.TenantKey != booking.TenantKey).length > 0){
           isValid = false;
         }
     }

@@ -1,6 +1,5 @@
 
 import {Component,ChangeDetectionStrategy,ViewChild,TemplateRef, Input, OnInit, OnChanges, SimpleChanges} from '@angular/core';
-import {startOfDay,endOfDay} from 'date-fns';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {CalendarEvent,CalendarEventAction,CalendarEventTimesChangedEvent,CalendarView,} from 'angular-calendar';
@@ -8,7 +7,6 @@ import { Booking } from '../models/booking';
 import { BookingModal } from '../modals/bookingModal/booking.modal';
 import { Appartment } from '../models/appartement';
 import { BookingService } from 'src/services/booking.service';
-import { PayStatusEnum } from '../enums/payStatusEnum';
 import { AuthService } from 'src/services/auth.service';
 
 @Component({
@@ -22,14 +20,14 @@ export class CalendarComponent implements OnInit, OnChanges {
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any> | undefined;
   @Input() bookings : Booking[] = [];
   @Input() appartment: Appartment | null = null;
-
+  public randomColors  = [colors.red, colors.green, colors.orange, colors.yellow, colors.blue]
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   public bookingPopup: Booking | null = null;
   viewDate: Date = new Date();
   isAdmin: boolean = false ;
   public openBookingModal() {
-    const modalRef = this.modalService.open(BookingModal);
+    const modalRef = this.modalService.open(BookingModal, {size : 'lg'});
 
     modalRef.componentInstance.appartment = this.appartment;
     modalRef.componentInstance.bookings = this.bookings;
@@ -84,12 +82,14 @@ export class CalendarComponent implements OnInit, OnChanges {
   }
 
   addCalendarEvents() {
+    var count = 0;
     this.bookings.forEach(booking => {
+
       this.events.push( {
       start: booking.StartDate ?  new Date(booking.StartDate) : new Date(),
       end: booking.EndDate ?  new Date(booking.EndDate)  : new Date(),
       title: booking.Name ? booking.Name : '',
-      color: booking.Paystatus == PayStatusEnum.NotPayed ? colors.red : booking.Paystatus == PayStatusEnum.FullyPayed ? colors.green : colors.orange,
+      color: this.randomColors[count],
       actions: this.actions,
 
       allDay: true,
@@ -100,6 +100,11 @@ export class CalendarComponent implements OnInit, OnChanges {
       draggable: true,
 
       })
+      if (count == 3) {
+        count = 0;
+      }else {
+        count ++;
+      }
     });
   }
 
@@ -109,15 +114,13 @@ export class CalendarComponent implements OnInit, OnChanges {
     var booking = this.bookingService.getBookingFromDay(date, this.bookings);
     if (!booking || booking == undefined)
       return;
-    const modalRef = this.modalService.open(BookingModal);
+    const modalRef = this.modalService.open(BookingModal, {size: 'lg'});
 
     modalRef.componentInstance.appartment = this.appartment;
     modalRef.componentInstance.bookings = this.bookings;
     modalRef.componentInstance.isNew = false;
     modalRef.componentInstance.isAdmin = this.isAdmin;
     modalRef.componentInstance.booking = booking;
-
-
   }
 
   eventTimesChanged({
@@ -155,7 +158,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.activeDayIsOpen = false;
   }
   public open(content: any, booking : Booking | false) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', size : 'lg'}).result.then((result) => {
     }, (reason) => {
     });
   }
@@ -172,6 +175,14 @@ const colors: any = {
   },
   orange: {
     primary: 'orange',
+    secondary: '#FDF1BA',
+  },
+  yellow: {
+    primary: 'yellow',
+    secondary: '#FDF1BA',
+  },
+  blue: {
+    primary: 'blue',
     secondary: '#FDF1BA',
   }
 };

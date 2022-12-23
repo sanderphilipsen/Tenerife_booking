@@ -12,7 +12,6 @@ export class Booking {
    this.TotalCost = totalCost;
    this.Discount = discount;
    this.Name = name;
-   this.Paystatus = paystatus ? paystatus : PayStatusEnum.NotPayed;
    this.PrePayedAmount = prePayedAmount;
    this.AdditionalInfo = additionalInfo;
    this.PrivateNote = privateNote;
@@ -28,7 +27,6 @@ export class Booking {
   Discount?: number | null;
   key?: string | null;
   Name? : string |null;
-  Paystatus?: PayStatusEnum;
   PrePayedAmount?: number | null;
   AdditionalInfo?: string| null;
   PrivateNote?: string | null;

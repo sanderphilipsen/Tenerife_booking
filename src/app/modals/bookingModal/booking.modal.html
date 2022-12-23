@@ -1,19 +1,17 @@
 <div class="modal-header">
   <div>
     <h4 class="modal-title">{{isNew ? NEWBOOKING : (editMode  ? UPDATEBOOKING : BOOKING + booking?.Name)}}
+      for appartment: {{appartment?.Name}}
     </h4>
 
   <p *ngIf="!editMode && isAdmin" (click)="editMode = true">Edit</p>
   <p *ngIf="editMode && isAdmin && !isNew" (click)="delete()">Delete</p>
   </div>
-
-  <h4 (click)="close()">Close</h4>
-
 </div>
 <div *ngIf="booking" class="modal-body">
   <form *ngIf="tenants" >
     <ng-template #rt let-r="result" let-t="term">
-      <ngb-highlight [result]='r.FirstName + " " + r.Name' [term]="t"></ngb-highlight>
+      <ngb-highlight [result]='r.Name' [term]="t"></ngb-highlight>
     </ng-template>
     <div class="form-group">
       <label for="exampleInputEmail">Renter</label>
@@ -27,8 +25,7 @@
           [ngbTypeahead]="search"
           [resultTemplate]="rt"
           [inputFormatter]="formatter"
-          (ngModelChange)="onChange($event)"
-        />
+          (ngModelChange)="onChange($event)"/>
     </div>
 
       <div class="form-group">
@@ -42,12 +39,6 @@
       <div *ngIf="isAdmin" class="form-group">
         <label for="exampleInputEmail">Total count of days</label>
         <input [disabled]="true" #e  [value]="this.numberOfDays" type="text" class="form-control"  placeholder="total number of days">
-      </div>
-      <div *ngIf="isAdmin" class="form-group">
-        <label for="exampleInputEmail">Pay status</label>
-        <select [disabled]="!editMode" name="paystatus" [ngModel]="booking.Paystatus" (ngModelChange)="onChangePayStatus($event)" class="form-select" aria-label="Default select example">
-          <option  *ngFor="let p of payStatuses" [ngValue]="p">{{p}}</option>
-        </select>
       </div>
       <div *ngIf="isAdmin" class="form-group">
         <label for="exampleInputEmail">Already payed</label>

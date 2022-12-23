@@ -1,32 +1,36 @@
 ::ng-deep .cal-day-badge {
   display: none !important;
 }
+
 .cell {
   height: 100% !important;
 }
+
 .dayofmonth{
   padding-left: 5px;
   padding-top: 5px;
 }
+
 .freeColor{
   background-color: #ecffb3;
-
 }
+
 .notFreeColor{
   background-color: #ffb3b3;
-
 }
 
 .red {
   background-color: #ffb3b3;
 }
+
 .green {
   background-color: #ecffb3;
-
 }
+
 .orange {
   background-color: orange;
 }
+
 .double{
   background-color: gray;
 }

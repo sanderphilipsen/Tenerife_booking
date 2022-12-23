@@ -52,8 +52,7 @@ import { TestFilterPipe } from './pipes/search.pipe';
     NgbModalModule,
     NgbModule,
     ModalModule,
-    OverviewModule
-  ],
+    OverviewModule  ],
   providers: [AuthService],
   bootstrap: [AppComponent]
 })
